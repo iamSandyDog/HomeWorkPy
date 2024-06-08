@@ -2,7 +2,7 @@ from table import ConsoleTable
 
 class ConsoleMenu:
     def __init__(self, help_filename):
-        self.help_text_nahui(help_filename)
+        self.__init_help_text(help_filename)
         self.table = ConsoleTable()
         self.active = False
         self.menu_items = {"создать": self.create_table, "открыть": self.open_table, "сохранить": self.save_table,
@@ -16,7 +16,7 @@ class ConsoleMenu:
         self.help()
         self.active = True
         while self.active:
-            command = input("Команда: ")
+            command = input("Команда: ").strip()
             if command in self.menu_items:
                 self.menu_items[command]()
             else:
@@ -80,21 +80,19 @@ class ConsoleMenu:
         return
 
     def change_cell(self):
-        x = int(input("Введите x "))
-        y = int(input("Введите y "))
+        y = int(input("Выберите строку "))
+        x = int(input("Выберите столбец "))
         value = int(input("Введите значение "))
         self.table.edit_value(x, y, value)
         return
 
-    def help_text_nahui(self, h):
-        with open(h, 'r') as file:
+    def __init_help_text(self, h):
+        with open(h, 'r', encoding='utf-8') as file:
             self.help_text = file.read()
 
     def help(self):
         print('О программе:')
-        with open("help", 'r') as file:
-            f = file.read()
-            print(f)
+        print(self.help_text)
         return
 
     def exit(self):

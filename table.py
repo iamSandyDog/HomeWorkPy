@@ -29,9 +29,7 @@ class ConsoleTable:
         return
 
     def __calculate_size(self):
-        row_length = len(self.data[0])
-        col_length = len(self.data)
-        self.size = (col_length, row_length)
+        self.size = (len(self.data), len(self.data[0]))
         return
 
     def add_rows(self, num=1):
@@ -43,11 +41,9 @@ class ConsoleTable:
         return
 
     def add_columns(self, num=1):
-        while num > 0:
-            for i in range(len(self.data)):
+        for i, row in enumerate(self.data):
+            for k in range(num):
                 self.data[i].append(0)
-                i += 1
-            num -= 1
         self.__calculate_size()
         return
 
@@ -55,28 +51,39 @@ class ConsoleTable:
         pprint.pprint(self.data)
 
     def edit_value(self, x, y, value):
-        self.data[x][y] = value
-
+        if x > 0 and y > 0 and (self.size[0] >= y and self.size[1] >= x):
+            self.data[x-1][y-1] = value
+        else:
+            print("Ячейка не существует")
 
     def mid_row(self, row):
-        # можно написать лучше, хз как
-        where = self.data[row]
-        print(np.mean(where))
+        if 0 < row <= self.size[0]:
+            print(np.mean(self.data[row-1]))
+        else:
+            print("Ячейка не существует")
         return
 
     def mid_column(self, col):
-        ax = np.mean(self.data, axis=0)
-        print(ax[col])
+        if 0 < col <= self.size[1]:
+            ax = np.mean(self.data, axis=0)
+            print(ax[col-1])
+        else:
+            print("Ячейка не существует")
         return
 
     def sum_row(self, row):
-        where = self.data[row]
-        print(np.sum(where))
+        if 0 < row <= self.size[0]:
+            print(np.sum(self.data[row-1]))
+        else:
+            print("Ячейка не существует")
         return
 
     def sum_column(self, col):
-        ax = np.sum(self.data, axis=0)
-        print(ax[col])
+        if 0 < col <= self.size[1]:
+            ax = np.sum(self.data, axis=0)
+            print(ax[col - 1])
+        else:
+            print("Ячейка не существует")
         return
 
     def write_file(self, filename):
